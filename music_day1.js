@@ -5,25 +5,21 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     bassSize = map(bass, 0, 100, 50, 400);  
     wordSize = map(vocal,0, 700, 60, 600)
 
-    let amplitude = -drumSize/1.;
+    let amplitude = -drumSize/1.1;
     let frequency = 0.007*-bassSize;
     let hueValue = (counter*2) %360;
     let changingColor = color(hueValue, 100, 100);
     colorMode(RGB);
     for (var i = 0; i<5; i++){   
       let yOffset = i*40;
-      let phase = i*PI/9;
+      let phase = i*100;
        drawWave(amplitude, frequency, counter, yOffset, phase);
       }
 
-      drawEllipse(width, height, bassSize, drumSize);
+    drawEllipse(width, height, bassSize, drumSize);
+
+    drawWords(words, wordSize, changingColor, width, height)
     
-
-
-    textAlign(CENTER);
-    textSize(wordSize);
-    fill(changingColor);
-    text(words, wordSize+width/3, height/4);
 }
    
 function drawWave(amplitude, frequency, counter, yOffset, phase){
@@ -39,10 +35,17 @@ endShape();
 noStroke();
 }
 
+function drawWords(words, wordSize, changingColor, width, height){
+  textAlign(CENTER);
+  textSize(wordSize);
+  fill(changingColor);
+  text(words, wordSize+width/3, height/4);
+}
+
 function drawEllipse(width, height, bassSize, drumSize){
-  let rows = 3;
-  let cols = 4;
-  let xSpace = width / (cols+1);
+  let rows = 5;
+  let cols = 5;
+  let xSpace = width / (cols+0.9);
   let ySpace = height / (rows +1);
 
   for (let row = 1; row <=rows; row++){
@@ -52,16 +55,15 @@ function drawEllipse(width, height, bassSize, drumSize){
 
       if ((row + col) %2 ==0){
             fill(255, 100, 50)
-            ellipse(x, y, bassSize, drumSize);}
-              fill(100, 100, 50);
-              ellipse(x, y, drumSize, bassSize);
-            
+            ellipse(x, y, bassSize/2, drumSize/2);
+            fill(100, 100, 50);
+            ellipse(x, y, drumSize/2, bassSize/2);
       }
+      
     }
     fill(167, 120, 30);
   }
-
-
+}
 
 
 
