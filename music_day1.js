@@ -88,8 +88,13 @@ function drawSpectrum (drum, bass, vocal, other, width, height, counter){
 noStroke();
 for (let i = 0; i<numBars; i++){
   let h = barHeights[i];
-  let hueShift = ((counter *2 + i*5) % 360 +360) %360;
-  fill(hueShift, 100, 100, 80);
+  if (i%2 ===0){
+    fill(255, 100, 50);
+  }else{
+    fill(100, 100, 50);
+  }
   rect(i*barWidth, height-h, barWidth-2, h)
   }
 }
+
+//NEED TO FIX COLOR FUNCTIONALITY
