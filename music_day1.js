@@ -1,4 +1,37 @@
 let barHeights = [];
+let barColors = [];
+let ellipseColors = [];
+
+function randomColorPalette(){ //allows user to edit/add colours to the color palette
+let colorPalette = [
+color(74, 219, 200, 180),
+color(92, 171, 125, 180),
+color(90, 147, 103, 180),
+];
+return colorPalette[int(random(colorPalette.length))];
+}
+
+function initialiseBarColors(numBars){
+  barColors = [];
+  for (let i = 0; i<numBars; i++ ){
+    barColors.push(randomColorPalette());
+  }
+}
+
+
+function initialiseEllipseColors(rows, cols){
+  ellipseColors = [];
+  for (let row = 0; row < rows; row++){
+  ellipseColors[row] = [];
+  for (let col = 0; col < cols; col++){
+    ellipseColors[row][col] = [
+      randomColorPalette(),
+      randomColorPalette()
+    ]
+    }
+  }
+}
+
 function draw_one_frame(words, vocal, drum, bass, other, counter) {
     background(20)
     drawSpectrum(drum, bass, vocal, other, width, height, counter);
@@ -48,6 +81,8 @@ function drawEllipse(width, height, bassSize, drumSize){
   let cols = 5;
   let xSpace = width / (cols+0.9);
   let ySpace = height / (rows +1);
+  if (ellipseColors.length === 0) initialiseEllipseColors(rows, cols);
+
 
   for (let row = 1; row <=rows; row++){
     for (let col = 1; col <= cols; col++){
@@ -55,13 +90,12 @@ function drawEllipse(width, height, bassSize, drumSize){
       let y = ySpace * row;
 
       if ((row + col) %2 ==0){
-            fill(255, 100, 50)
+            fill(ellipseColors[row-1][col-1][0]);
             ellipse(x, y, bassSize/2, drumSize/2);
-            fill(100, 100, 50);
+            fill(ellipseColors[row-1][col-1][1]);
             ellipse(x, y, drumSize/2, bassSize/2);
       }
     }
-    fill(167, 120, 30);
   }
 }
 
@@ -72,6 +106,7 @@ function drawSpectrum (drum, bass, vocal, other, width, height, counter){
 
   if (barHeights.length != numBars){
     barHeights = new Array(numBars).fill(0);
+    initialiseBarColors(numBars);
   }
 
   for (let i=0; i<numBars; i++){
@@ -88,13 +123,8 @@ function drawSpectrum (drum, bass, vocal, other, width, height, counter){
 noStroke();
 for (let i = 0; i<numBars; i++){
   let h = barHeights[i];
-  if (i%2 ===0){
-    fill(255, 100, 50);
-  }else{
-    fill(100, 100, 50);
-  }
+  fill(barColors[i]);
   rect(i*barWidth, height-h, barWidth-2, h)
   }
 }
 
-//NEED TO FIX COLOR FUNCTIONALITY
