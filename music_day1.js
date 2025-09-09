@@ -2,6 +2,8 @@ let barHeights = [];
 let barColors = [];
 let ellipseColors = [];
 
+
+
 function randomColorPalette(){ //allows user to edit/add colours to the color palette
 let colorPalette = [
 color(74, 219, 200, 180),
@@ -34,6 +36,10 @@ function initialiseEllipseColors(rows, cols){
 
 function draw_one_frame(words, vocal, drum, bass, other, counter) {
     background(20)
+    fill(255);
+    textSize(32);
+    textAlign(LEFT, TOP);
+    text(counter, 20, 20);
     drawSpectrum(drum, bass, vocal, other, width, height, counter);
 
     let drumSize = map(drum, 0, 100, 50, 400);  
@@ -49,11 +55,18 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     for (var i = 0; i<5; i++){   
       let yOffset = i*40;
       let phase = i*100;
-       drawWave(amplitude, frequency, counter, yOffset, phase);
+        if((counter > 1 && counter <= 2700) || (counter >=4500 && counter <= 7100) || (counter >=8000 && counter <= 9840)){ //verse counter
+           drawWave(amplitude, frequency, counter, yOffset, phase);
+        }
       }
     pop();
+    if ((counter >= 2755 && counter <= 4500) || (counter >= 7100 && counter <= 8000)){//chorus counter
     drawEllipse(width, height, bassSize, drumSize);
+  }
+
+  if((counter > 1 && counter <= 2700) || (counter >=4500 && counter <= 7100) || (counter >=8000 && counter <= 9840)){ //verse counter
     drawWords(words, wordSize, changingColor, width, height)
+  }
 }
    
 function drawWave(amplitude, frequency, counter, yOffset, phase){
