@@ -3,6 +3,7 @@ let barColors = [];
 let ellipseColors = [];
 
 function randomColorPalette() { //allows user to edit/add colours to the color palette
+  colorMode(RGB);
   let colorPalette = [
     color(74, 219, 200, 180),
     color(92, 171, 125, 180),
@@ -11,11 +12,14 @@ function randomColorPalette() { //allows user to edit/add colours to the color p
   return colorPalette[int(random(colorPalette.length))];
 }
 
-function chorusColor(counter) {
+function chorusColor(counter, alpha = 120) {
   colorMode(HSB);
-  let c = color((counter % 360), 100, 100);
+  let base = color((counter % 360), 100, 100);
+  let r = red(base);
+  let g = green(base);
+  let b = blue(base);
   colorMode(RGB);
-  return c;
+  return color(r, g, b, alpha);
 }
 
 function initialiseBarColors(numBars) {
@@ -66,9 +70,9 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   }
   pop();
 
-  if ((counter >= 2755 && counter <= 4500) || (counter >= 7100 && counter <= 8000)) { //chorus counter
-    drawEllipse(width, height, bassSize, drumSize);
-  }
+    if ((counter >= 2755 && counter <= 4500) || (counter >= 7100 && counter <= 8000)) { //chorus counter
+    drawEllipse(width, height, bassSize, drumSize, counter);
+    }
 
   if ((counter > 1 && counter <= 2700) || (counter >= 4500 && counter <= 7100) || (counter >= 8000 && counter <= 9841)) { //verse counter
     drawWords(words, wordSize, changingColor, width, height);
@@ -109,9 +113,12 @@ function drawEllipse(width, height, bassSize, drumSize, counter) {
       let y = ySpace * row;
       
         if((row+col)%2 ==0){
-          fill(ellipseColors[row - 1][col - 1][0]);
+          const idx = (row-1)*cols + (col-1)
+          const c1 = chorusColor(counter +idx*8, 120)
+          const c2 = chorusColor(counter +idx*8+180, 120)
+          fill(c1);
           ellipse(x, y, bassSize / 2, drumSize / 2);
-          fill(ellipseColors[row - 1][col - 1][1]);
+          fill(c2);
           ellipse(x, y, drumSize / 2, bassSize / 2);
 
         }
