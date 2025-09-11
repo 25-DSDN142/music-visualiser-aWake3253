@@ -2,6 +2,8 @@ let barHeights = [];
 let barColors = [];
 let ellipseColors = [];
 
+let chorusPalette = null; 
+
 function randomColorPalette() { //allows user to edit/add colours to the color palette
   let colorPalette = [
     color(74, 219, 200, 180),
@@ -11,11 +13,25 @@ function randomColorPalette() { //allows user to edit/add colours to the color p
   return colorPalette[int(random(colorPalette.length))];
 }
 
-function chorusColor(counter) {
-  colorMode(HSB);
-  let c = color((counter % 360), 100, 100);
-  colorMode(RGB);
-  return c;
+function chorusColor(counter, index) {
+  // Initialize chorusPalette on first use
+  if (!chorusPalette) {
+    chorusPalette = [
+      color(74, 219, 200),
+      color(92, 171, 125),
+      color(90, 147, 103),
+      color(200, 100, 150),
+      color(255, 180, 50)
+    ];
+  }
+  let speed = 120;
+  let t = (counter / speed +index ) % chorusPalette.length;
+  
+  let i1 = floor(t);
+  let i2 = (i1+1) % chorusPalette.length;
+
+  let amt = t-i1
+  return lerpColor (chorusPalette[i1], chorusPalette[i2], amt)
 }
 
 function initialiseBarColors(numBars) {
@@ -67,7 +83,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   pop();
 
   if ((counter >= 2755 && counter <= 4500) || (counter >= 7100 && counter <= 8000)) { //chorus counter
-    drawEllipse(width, height, bassSize, drumSize);
+    drawEllipse(width, height, bassSize, drumSize, counter);
   }
 
   if ((counter > 1 && counter <= 2700) || (counter >= 4500 && counter <= 7100) || (counter >= 8000 && counter <= 9841)) { //verse counter
@@ -100,8 +116,6 @@ function drawEllipse(width, height, bassSize, drumSize, counter) {
   let cols = 5;
   let xSpace = width / (cols + 0.9);
   let ySpace = height / (rows + 1);
-  if (ellipseColors.length === 0) initialiseEllipseColors(rows, cols);
-
 
   for (let row = 1; row <= rows; row++) {
     for (let col = 1; col <= cols; col++) {
@@ -109,9 +123,11 @@ function drawEllipse(width, height, bassSize, drumSize, counter) {
       let y = ySpace * row;
       
         if((row+col)%2 ==0){
-          fill(ellipseColors[row - 1][col - 1][0]);
+          let c1 = chorusColor(counter, row+col);
+          let c2 = chorusColor(counter, row*col);
+          fill(c1);
           ellipse(x, y, bassSize / 2, drumSize / 2);
-          fill(ellipseColors[row - 1][col - 1][1]);
+          fill(c2);
           ellipse(x, y, drumSize / 2, bassSize / 2);
 
         }
@@ -144,12 +160,11 @@ function drawEllipse(width, height, bassSize, drumSize, counter) {
     for (let i = 0; i < numBars; i++) {
       let h = barHeights[i];
       if ((counter >= 2755 && counter <= 4500) || (counter >= 7100 && counter <= 8000)) { //chorus counter
-        fill(chorusColor(counter + i * 5));
+        fill(chorusColor(counter, i ));
       } else {
         fill(barColors[i]);
       }
       rect(i * barWidth, height - h, barWidth - 2, h)
     }
   }
-  
 
