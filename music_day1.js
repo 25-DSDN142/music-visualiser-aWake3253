@@ -5,9 +5,11 @@ let chorusPalette = null;
 
 function randomColorPalette() { //allows user to edit/add colours to the color palette
   let colorPalette = [
-    color(74, 219, 200, 180),
-    color(92, 171, 125, 180),
-    color(90, 147, 103, 180),
+      color(54,80,193),
+      color(228, 115, 187, 180),
+      color(137, 204, 241, 180),
+      color(159,105, 211, 180),
+      color(245, 187, 225, 180)
   ];
   return colorPalette[int(random(colorPalette.length))];
 }
@@ -15,11 +17,10 @@ function randomColorPalette() { //allows user to edit/add colours to the color p
 function chorusColor(counter, index) {
   if (!chorusPalette) 
     chorusPalette = [
-      color(74, 219, 200),
-      color(92, 171, 125),
-      color(90, 147, 103),
-      color(200, 100, 150),
-      color(255, 180, 50)
+      color(228, 115, 187),
+      color(137, 204, 241),
+      color(159,105, 211),
+      color(245, 187, 225)
     ];
   
 
