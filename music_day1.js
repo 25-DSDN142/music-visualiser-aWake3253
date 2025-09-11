@@ -11,11 +11,10 @@ function randomColorPalette() { //allows user to edit/add colours to the color p
   return colorPalette[int(random(colorPalette.length))];
 }
 
-function chorusColor(counter) {
-  colorMode(HSB);
-  let c = color((counter % 360), 100, 100);
-  colorMode(RGB);
-  return c;
+function chorusColor(counter, index) {
+  let speed = 10;
+  let paletteIndex = floor((counter / speed +index )) % chorusPalette.length;
+  return chorusPalette[paletteIndex];
 }
 
 function initialiseBarColors(numBars) {
@@ -67,7 +66,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   pop();
 
   if ((counter >= 2755 && counter <= 4500) || (counter >= 7100 && counter <= 8000)) { //chorus counter
-    drawEllipse(width, height, bassSize, drumSize);
+    drawEllipse(width, height, bassSize, drumSize, counter);
   }
 
   if ((counter > 1 && counter <= 2700) || (counter >= 4500 && counter <= 7100) || (counter >= 8000 && counter <= 9841)) { //verse counter
@@ -100,7 +99,6 @@ function drawEllipse(width, height, bassSize, drumSize, counter) {
   let cols = 5;
   let xSpace = width / (cols + 0.9);
   let ySpace = height / (rows + 1);
-  if (ellipseColors.length === 0) initialiseEllipseColors(rows, cols);
 
 
   for (let row = 1; row <= rows; row++) {
