@@ -104,14 +104,21 @@ function drawWave(amplitude, frequency, counter, yOffset, phase) {
 }
 
 function drawWords(words, wordSize, changingColor, width, height, vocal, bass, counter) {
-  textAlign(CENTER);
+  textAlign(CENTER, CENTER);
+  fill(changingColor);
   textSize(wordSize);
   
-  let waveX = width /2 +40 *sin (counter*0.02 + bass *0.05)
-  let waveY = height /3 +25 *sin (counter*0.015 + vocal *0.02)
+  let baseX = width/2;
+  let baseY = height/2;
 
-  fill(changingColor);
-  text(words, waveX, waveY);
+  let spacing = wordSize *0.6;
+  let startX = baseX - (words.length-1) *spacing/2;
+
+  for (let i= 0; i <words.length; i++){
+    let charX = startX +i *spacing +10 *sin(counter *0.05+i*0.3);
+    let charY = baseY +25 *sin(counter *0.05 +i*0.05+vocal *0.02)
+    text(words[i], charX, charY);
+  }
 }
 
 function drawEllipse(width, height, bassSize, drumSize, counter) {
