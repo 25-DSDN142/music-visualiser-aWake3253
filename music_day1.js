@@ -1,7 +1,6 @@
 let barHeights = [];
 let barColors = [];
 let ellipseColors = [];
-
 let chorusPalette = null; 
 
 function randomColorPalette() { //allows user to edit/add colours to the color palette
@@ -14,8 +13,7 @@ function randomColorPalette() { //allows user to edit/add colours to the color p
 }
 
 function chorusColor(counter, index) {
-  // Initialize chorusPalette on first use
-  if (!chorusPalette) {
+  if (!chorusPalette) 
     chorusPalette = [
       color(74, 219, 200),
       color(92, 171, 125),
@@ -23,7 +21,8 @@ function chorusColor(counter, index) {
       color(200, 100, 150),
       color(255, 180, 50)
     ];
-  }
+  
+
   let speed = 120;
   let t = (counter / speed +index ) % chorusPalette.length;
   
@@ -32,7 +31,7 @@ function chorusColor(counter, index) {
 
   let amt = t-i1
   return lerpColor (chorusPalette[i1], chorusPalette[i2], amt)
-}
+  }
 
 function initialiseBarColors(numBars) {
   barColors = [];
@@ -87,7 +86,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   }
 
   if ((counter > 1 && counter <= 2700) || (counter >= 4500 && counter <= 7100) || (counter >= 8000 && counter <= 9841)) { //verse counter
-    drawWords(words, wordSize, changingColor, width, height);
+    drawWords(words, wordSize, changingColor, width, height, vocal, bass, counter);
   }
 }
 
@@ -104,11 +103,15 @@ function drawWave(amplitude, frequency, counter, yOffset, phase) {
   noStroke();
 }
 
-function drawWords(words, wordSize, changingColor, width, height) {
+function drawWords(words, wordSize, changingColor, width, height, vocal, bass, counter) {
   textAlign(CENTER);
   textSize(wordSize);
+  
+  let waveX = width /2 +40 *sin (counter*0.02 + bass *0.05)
+  let waveY = height /3 +25 *sin (counter*0.015 + vocal *0.02)
+
   fill(changingColor);
-  text(words, wordSize + width / 3, height / 4);
+  text(words, waveX, waveY);
 }
 
 function drawEllipse(width, height, bassSize, drumSize, counter) {
